@@ -32,5 +32,24 @@ module ProductTaxonomy
     def docs
       GenerateDocsCommand.new(options).run
     end
+
+    desc "release", "Generate a release"
+    option :version, type: :string, desc: "The version of the release to generate"
+    option :locales, type: :array, default: ["en"], desc: "The locales to generate"
+    def release
+      GenerateReleaseCommand.new(options).run
+    end
+
+    desc "dump_categories", "Dump category verticals to YAML files"
+    option :verticals, type: :array, desc: "List of vertical IDs to dump (defaults to all verticals)"
+    def dump_categories
+      DumpCategoriesCommand.new(options).run
+    end
+
+    desc "sync_en_localizations", "Sync English localizations for categories, attributes, and values"
+    option :targets, type: :string, desc: "List of targets to sync. Valid targets are: categories, attributes, values"
+    def sync_en_localizations
+      SyncEnLocalizationsCommand.new(options).run
+    end
   end
 end

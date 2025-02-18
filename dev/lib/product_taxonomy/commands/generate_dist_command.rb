@@ -7,7 +7,7 @@ module ProductTaxonomy
     def initialize(options)
       super
 
-      @version = options[:version] || File.read(File.expand_path("../../../../VERSION", __dir__)).strip
+      @version = options[:version] || File.read(version_file_path).strip
       @locales = if options[:locales] == ["all"]
         glob = Dir.glob(File.expand_path("localizations/categories/*.yml", ProductTaxonomy.data_path))
         glob.map { File.basename(_1, ".yml") }
@@ -24,6 +24,9 @@ module ProductTaxonomy
       logger.info("Locales: #{@locales.join(", ")}")
 
       load_taxonomy
+
+      logger.info("Validating localizations")
+      LocalizationsValidator.validate!(@locales)
 
       @locales.each { generate_dist_files(_1) }
 
